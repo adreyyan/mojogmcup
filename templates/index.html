@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mojo GM Cup Generator</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Mojo GM Cup Generator</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div>
+                <label>Please choose the type of your Mojo NFT:</label>
+                <input type="radio" id="human" name="creature" value="human" checked>
+                <label for="human">Human</label>
+                <input type="radio" id="demon" name="creature" value="demon">
+                <label for="demon">Demon</label>
+                <input type="radio" id="spirit" name="creature" value="spirit">
+                <label for="spirit">Spirit</label>
+            </div>
+            <div id="skin-tone-selection">
+                <label for="skin-tone">Please choose the skin tone:</label>
+                <select name="skin_tone" id="skin-tone">
+                    <option value="1">Tone 1</option>
+                    <option value="2">Tone 2</option>
+                    <option value="3" id="tone3-option">Tone 3</option>
+                </select>
+            </div>
+            <div>
+                <label>Please choose the gender:</label>
+                <input type="radio" id="boy" name="gender" value="boy" checked>
+                <label for="boy">Boy</label>
+                <input type="radio" id="girl" name="gender" value="girl">
+                <label for="girl">Girl</label>
+            </div>
+            <div>
+                <label for="nft-upload">Upload your NFT:</label>
+                <input type="file" id="nft-upload" name="nft_image" required>
+            </div>
+            <div>
+                <button type="submit">Generate</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const creatureInputs = document.querySelectorAll('input[name="creature"]');
+            const genderInputs = document.querySelectorAll('input[name="gender"]');
+            const skinToneSelect = document.getElementById('skin-tone');
+            const tone3Option = document.getElementById('tone3-option');
+
+            function updateSkinToneOptions() {
+                const selectedCreature = document.querySelector('input[name="creature"]:checked').value;
+                const selectedGender = document.querySelector('input[name="gender"]:checked').value;
+
+                skinToneSelect.disabled = selectedCreature !== 'human';
+                tone3Option.disabled = selectedCreature === 'human' && selectedGender === 'girl';
+
+                if (tone3Option.disabled && tone3Option.selected) {
+                    skinToneSelect.value = '1';
+                }
+            }
+
+            creatureInputs.forEach(input => {
+                input.addEventListener('change', updateSkinToneOptions);
+            });
+            genderInputs.forEach(input => {
+                input.addEventListener('change', updateSkinToneOptions);
+            });
+
+            updateSkinToneOptions();
+        });
+    </script>
+</body>
+</html>
